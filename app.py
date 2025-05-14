@@ -502,8 +502,11 @@ def generate_multiple_choice_questions(cv_text, max_questions=10):
         {"question": f"Does {person} have experience in management?", "options": ["Yes", "No"], "answer": "No"},
         {"question": f"Which industry might {person} be involved in?", "options": ["Tech", "Healthcare", "Education", "Retail"], "answer": random.choice(["Tech", "Healthcare"])}
     ]
-    if len(questions) < max_questions:
-        questions.extend([random.choice(fallback_questions) for _ in range(max_questions - len(questions))])
+    
+    # Only sample fallback questions if needed and possible
+    if len(questions) < max_questions and len(fallback_questions) > 0:
+        num_to_sample = min(max_questions - len(questions), len(fallback_questions))
+        questions.extend(random.sample(fallback_questions, num_to_sample))
     
     return questions[:max_questions], bool(technical_questions)
 
@@ -564,8 +567,11 @@ def generate_true_false_questions(cv_text, max_questions=10):
         {"question": f"Does {person} have leadership experience?", "answer": random.choice([True, False])},
         {"question": f"Has {person} worked abroad?", "answer": random.choice([True, False])}
     ]
-    if len(questions) < max_questions:
-        questions.extend([random.choice(fallback_questions) for _ in range(max_questions - len(questions))])
+    
+    # Only sample fallback questions if needed and possible
+    if len(questions) < max_questions and len(fallback_questions) > 0:
+        num_to_sample = min(max_questions - len(questions), len(fallback_questions))
+        questions.extend(random.sample(fallback_questions, num_to_sample))
     
     return questions[:max_questions], bool(technical_questions)
 
@@ -611,8 +617,11 @@ def generate_open_questions(cv_text, max_questions=10):
         f"What challenges has {person} faced in their career?",
         f"How does {person} stay updated in their field?"
     ]
-    if len(questions) < max_questions:
-        questions.extend(random.sample(fallback_questions, max_questions - len(questions)))
+    
+    # Only sample fallback questions if needed and possible
+    if len(questions) < max_questions and len(fallback_questions) > 0:
+        num_to_sample = min(max_questions - len(questions), len(fallback_questions))
+        questions.extend(random.sample(fallback_questions, num_to_sample))
     
     return questions[:max_questions], bool(technical_questions)
 
